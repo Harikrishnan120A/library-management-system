@@ -23,6 +23,7 @@ public class Student implements Serializable {
     private String studentId;
     private String name;
     private String email;
+    private String phoneNumber;
     private List<String> borrowedBooks; // List of bookIds currently borrowed
     private int maxBorrowLimit;
 
@@ -37,6 +38,7 @@ public class Student implements Serializable {
         this.studentId = studentId;
         this.name = name;
         this.email = email;
+        this.phoneNumber = "";
         this.borrowedBooks = new ArrayList<>();
         this.maxBorrowLimit = 3;
     }
@@ -65,6 +67,14 @@ public class Student implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public List<String> getBorrowedBooks() {
@@ -119,8 +129,8 @@ public class Student implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("Student[id=%s, name='%s', email='%s', borrowed=%d/%d]",
-                studentId, name, email, borrowedBooks.size(), maxBorrowLimit);
+        return String.format("Student[id=%s, name='%s', email='%s', phone='%s', borrowed=%d/%d]",
+            studentId, name, email, phoneNumber, borrowedBooks.size(), maxBorrowLimit);
     }
 
     @Override

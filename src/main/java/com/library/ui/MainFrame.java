@@ -1,6 +1,9 @@
 package com.library.ui;
 
+import com.library.model.SmsSettings;
+import com.library.model.SmsReminderSummary;
 import com.library.service.LibraryService;
+import com.library.service.SmsSettingsService;
 import com.library.util.Constants;
 
 import javax.swing.*;
@@ -30,6 +33,7 @@ import java.io.*;
 public class MainFrame extends JFrame {
 
     private final LibraryService libraryService;
+    private final SmsSettingsService smsSettingsService;
 
     // Tab panels
     private DashboardPanel dashboardPanel;
@@ -48,6 +52,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         this.libraryService = LibraryService.getInstance();
+        this.smsSettingsService = SmsSettingsService.getInstance();
         initializeUI();
     }
 
@@ -152,8 +157,21 @@ public class MainFrame extends JFrame {
                     "Report", JOptionPane.INFORMATION_MESSAGE);
         });
 
+        JMenuItem smsAlerts = new JMenuItem("Send Due-Date SMS Alerts...");
+        smsAlerts.addActionListener(e -> runSmsAlerts());
+
         reportsMenu.add(generateReport);
         reportsMenu.add(viewReport);
+        reportsMenu.addSeparator();
+        reportsMenu.add(smsAlerts);
+
+        // --- Settings Menu ---
+        JMenu settingsMenu = new JMenu("Settings");
+        settingsMenu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+
+        JMenuItem smsSettings = new JMenuItem("SMS Settings...");
+        smsSettings.addActionListener(e -> openSmsSettingsDialog());
+        settingsMenu.add(smsSettings);
 
         // --- Help Menu ---
         JMenu helpMenu = new JMenu("Help");
@@ -166,6 +184,7 @@ public class MainFrame extends JFrame {
 
         menuBar.add(fileMenu);
         menuBar.add(reportsMenu);
+        menuBar.add(settingsMenu);
         menuBar.add(helpMenu);
 
         return menuBar;
@@ -331,5 +350,134 @@ public class MainFrame extends JFrame {
                         "Export Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    /**
+     * Runs due-date SMS reminders from the GUI.
+     */
+    private void runSmsAlerts() {
+        String input = JOptionPane.showInputDialog(this,
+                "Send reminders for books due in how many days?",
+                "2");
+
+        if (input == null) {
+            return; // user cancelled
+        }
+
+        int days;
+        try {
+            days = Integer.parseInt(input.trim());
+            if (days < 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Please enter zero or a positive number.",
+                        "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Please enter a valid number.",
+                    "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        SmsReminderSummary summary = libraryService.sendDueDateSmsReminders(days);
+        String message = String.format(
+                "SMS Reminder Run Complete\n\nAttempted: %d\nSent: %d\nFailed: %d\nNo Phone: %d\nOutside Window: %d",
+                summary.getAttempted(),
+                summary.getSent(),
+                summary.getFailed(),
+                summary.getSkippedNoPhone(),
+                summary.getSkippedOutsideWindow());
+
+        JOptionPane.showMessageDialog(this, message,
+                "SMS Alerts", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Opens a dialog to configure SMS provider settings.
+     */
+    private void openSmsSettingsDialog() {
+        SmsSettings current = smsSettingsService.loadSettings();
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(6, 6, 6, 6);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+
+        JComboBox<String> providerCombo = new JComboBox<>(new String[]{
+                Constants.SMS_PROVIDER_GENERIC,
+                Constants.SMS_PROVIDER_TWILIO
+        });
+        providerCombo.setSelectedItem(
+                current.getProvider() == null || current.getProvider().isBlank()
+                        ? Constants.SMS_PROVIDER_GENERIC
+                        : current.getProvider().toUpperCase());
+
+        JTextField apiUrlField = new JTextField(current.getSmsApiUrl(), 24);
+        JTextField apiTokenField = new JTextField(current.getSmsApiToken(), 24);
+        JTextField senderField = new JTextField(current.getSmsSenderId(), 24);
+        JTextField sidField = new JTextField(current.getTwilioAccountSid(), 24);
+        JTextField authTokenField = new JTextField(current.getTwilioAuthToken(), 24);
+        JTextField fromField = new JTextField(current.getTwilioFromNumber(), 24);
+
+        int row = 0;
+        row = addSettingsRow(panel, gbc, row, "Provider:", providerCombo);
+        row = addSettingsRow(panel, gbc, row, "Generic API URL:", apiUrlField);
+        row = addSettingsRow(panel, gbc, row, "Generic API Token:", apiTokenField);
+        row = addSettingsRow(panel, gbc, row, "Generic Sender ID:", senderField);
+        row = addSettingsRow(panel, gbc, row, "Twilio Account SID:", sidField);
+        row = addSettingsRow(panel, gbc, row, "Twilio Auth Token:", authTokenField);
+        row = addSettingsRow(panel, gbc, row, "Twilio From Number:", fromField);
+
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        gbc.gridwidth = 2;
+        JLabel note = new JLabel("Environment variables override saved values when present.");
+        note.setFont(new Font("Segoe UI", Font.ITALIC, 11));
+        note.setForeground(Color.DARK_GRAY);
+        panel.add(note, gbc);
+
+        int result = JOptionPane.showConfirmDialog(this, panel,
+                "SMS Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result != JOptionPane.OK_OPTION) {
+            return;
+        }
+
+        SmsSettings updated = new SmsSettings();
+        updated.setProvider(String.valueOf(providerCombo.getSelectedItem()));
+        updated.setSmsApiUrl(apiUrlField.getText());
+        updated.setSmsApiToken(apiTokenField.getText());
+        updated.setSmsSenderId(senderField.getText());
+        updated.setTwilioAccountSid(sidField.getText());
+        updated.setTwilioAuthToken(authTokenField.getText());
+        updated.setTwilioFromNumber(fromField.getText());
+
+        try {
+            smsSettingsService.saveSettings(updated);
+            libraryService.refreshSmsService();
+            JOptionPane.showMessageDialog(this,
+                    "SMS settings saved and applied.",
+                    "Settings Saved", JOptionPane.INFORMATION_MESSAGE);
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Failed to save SMS settings: " + ex.getMessage(),
+                    "Save Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private int addSettingsRow(JPanel panel, GridBagConstraints gbc, int row, String labelText, JComponent component) {
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        gbc.weightx = 0;
+        panel.add(new JLabel(labelText), gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 1;
+        panel.add(component, gbc);
+
+        return row + 1;
     }
 }

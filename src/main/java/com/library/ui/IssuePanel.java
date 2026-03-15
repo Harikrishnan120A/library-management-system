@@ -30,6 +30,7 @@ public class IssuePanel extends JPanel {
 
     // Issue form fields
     private JTextField issueStudentIdField;
+    private JTextField issueStudentPhoneField;
     private JTextField issueBookIdField;
 
     // Return form fields
@@ -134,8 +135,16 @@ public class IssuePanel extends JPanel {
         issueBookIdField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         panel.add(issueBookIdField, gbc);
 
+        // Phone number (optional)
+        gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0;
+        panel.add(new JLabel("Phone (SMS):"), gbc);
+        gbc.gridx = 1; gbc.weightx = 1;
+        issueStudentPhoneField = new JTextField(15);
+        issueStudentPhoneField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        panel.add(issueStudentPhoneField, gbc);
+
         // Issue button
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
         JButton issueBtn = new JButton("  Issue Book  ");
@@ -201,6 +210,7 @@ public class IssuePanel extends JPanel {
     private void handleIssueBook() {
         String studentId = issueStudentIdField.getText().trim();
         String bookId = issueBookIdField.getText().trim();
+        String phoneNumber = issueStudentPhoneField.getText().trim();
 
         // Input validation
         if (studentId.isEmpty()) {
@@ -217,7 +227,7 @@ public class IssuePanel extends JPanel {
         }
 
         try {
-            BorrowRecord record = libraryService.issueBook(bookId, studentId);
+            BorrowRecord record = libraryService.issueBook(bookId, studentId, phoneNumber);
             JOptionPane.showMessageDialog(this,
                     String.format("Book issued successfully!\n\nRecord ID: %s\nBook: %s\nStudent: %s\nDue Date: %s",
                             record.getRecordId(),
@@ -229,6 +239,7 @@ public class IssuePanel extends JPanel {
             // Clear fields
             issueStudentIdField.setText("");
             issueBookIdField.setText("");
+            issueStudentPhoneField.setText("");
             refreshData();
 
         } catch (BookNotFoundException ex) {

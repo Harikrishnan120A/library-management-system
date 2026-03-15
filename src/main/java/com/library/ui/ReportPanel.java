@@ -31,8 +31,7 @@ public class ReportPanel extends JPanel {
     private JLabel totalBooksVal, availableVal, issuedVal, overdueVal;
     private JLabel studentsVal, recordsVal, finesVal;
 
-    // Most borrowed table
-    private JTable mostBorrowedTable;
+    // Most borrowed list model
     private DefaultListModel<String> mostBorrowedModel;
 
     // Overdue table

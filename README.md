@@ -11,6 +11,7 @@ A complete **Java desktop application** for managing library operations — buil
 - **Search Books** by ID, Title, or Author (case-insensitive, real-time filtering)
 - **Fine Calculation** — ₹5 per day after a 14-day borrow period
 - **Overdue Detection** — highlights overdue records in red
+- **SMS Due-Date Alerts** — send reminder SMS for books due soon or already overdue
 - **Dashboard** with statistics cards (Total Books, Available, Issued, Overdue)
 - **Reports** with summary statistics, most borrowed books, and CSV export
 - **CSV Import/Export** for books data
@@ -153,6 +154,26 @@ Data files are stored in the `data/` directory:
 - `records.dat` — Serialized borrow records
 - `students.dat` — Serialized student records
 - `*.dat.bak` — Backup files created before each save
+
+SMS gateway environment variables (optional):
+- `SMS_PROVIDER` — set to `TWILIO` to use Twilio, or leave unset for generic HTTP mode
+- `SMS_API_URL` — HTTP endpoint that accepts JSON `{ "to", "message", "sender" }`
+- `SMS_API_TOKEN` — Bearer token (if your provider needs authorization)
+- `SMS_SENDER_ID` — Sender label (defaults to `LIBRARY`)
+
+Twilio variables (required when `SMS_PROVIDER=TWILIO`):
+- `TWILIO_ACCOUNT_SID`
+- `TWILIO_AUTH_TOKEN`
+- `TWILIO_FROM_NUMBER` (E.164 format, e.g. `+14155551234`)
+
+You can trigger reminders from:
+- GUI: `Reports -> Send Due-Date SMS Alerts...`
+- Console: menu option `8. Send Due-Date SMS Reminders`
+
+You can configure SMS providers from GUI:
+- `Settings -> SMS Settings...`
+- Saved locally to `data/sms.properties`
+- If environment variables are set, they take precedence over saved settings
 
 ---
 

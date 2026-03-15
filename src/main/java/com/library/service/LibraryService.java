@@ -9,6 +9,7 @@ import com.library.util.IDGenerator;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.logging.*;
 import java.util.stream.Collectors;
@@ -46,6 +47,8 @@ public class LibraryService {
 
     // Composition: LibraryService HAS-A FileStorageService
     private final FileStorageService storageService;
+    private final SmsSettingsService smsSettingsService;
+    private volatile SmsService smsService;
 
     /**
      * Private constructor — Singleton pattern.
@@ -53,6 +56,8 @@ public class LibraryService {
      */
     private LibraryService() {
         this.storageService = FileStorageService.getInstance();
+        this.smsSettingsService = SmsSettingsService.getInstance();
+        this.smsService = createSmsService();
         initializeLogger();
         loadAllData();
 
@@ -164,6 +169,14 @@ public class LibraryService {
      */
     public BorrowRecord issueBook(String bookId, String studentId)
             throws BookNotFoundException, BookNotAvailableException, StudentLimitExceededException {
+        return issueBook(bookId, studentId, null);
+    }
+
+    /**
+     * Issues a book and optionally updates the student's phone number.
+     */
+    public BorrowRecord issueBook(String bookId, String studentId, String phoneNumber)
+            throws BookNotFoundException, BookNotAvailableException, StudentLimitExceededException {
 
         // Validate book exists
         Book book = findBookById(bookId)
@@ -180,6 +193,10 @@ public class LibraryService {
             LOGGER.info("Auto-created student: " + id);
             return newStudent;
         });
+
+        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+            student.setPhoneNumber(phoneNumber.trim());
+        }
 
         // Check student borrow limit
         if (!student.canBorrow()) {
@@ -202,6 +219,100 @@ public class LibraryService {
                 bookId, studentId, record.getRecordId(), DateUtils.formatDate(dueDate)));
 
         return record;
+    }
+
+    /**
+     * Registers or updates a student's phone number for SMS reminders.
+     */
+    public void registerOrUpdateStudentPhone(String studentId, String phoneNumber) {
+        if (studentId == null || studentId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Student ID cannot be empty.");
+        }
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            throw new IllegalArgumentException("Phone number cannot be empty.");
+        }
+
+        String cleanStudentId = studentId.trim();
+        Student student = students.computeIfAbsent(cleanStudentId, id -> {
+            Student newStudent = new Student(id, "Student " + id, id + "@library.com");
+            LOGGER.info("Auto-created student for contact update: " + id);
+            return newStudent;
+        });
+
+        student.setPhoneNumber(phoneNumber.trim());
+        saveAllData();
+        LOGGER.info("Updated SMS phone for student: " + cleanStudentId);
+    }
+
+    /**
+     * Sends SMS reminders for records due within the provided window or already overdue.
+     */
+    public SmsReminderSummary sendDueDateSmsReminders(int reminderWindowDays) {
+        if (reminderWindowDays < 0) {
+            throw new IllegalArgumentException("Reminder window cannot be negative.");
+        }
+
+        SmsReminderSummary summary = new SmsReminderSummary();
+        LocalDate today = LocalDate.now();
+
+        for (BorrowRecord record : borrowRecords) {
+            if (record.getStatus() == Status.RETURNED) {
+                continue;
+            }
+
+            long daysUntilDue = ChronoUnit.DAYS.between(today, record.getDueDate());
+            boolean inReminderWindow = daysUntilDue >= 0 && daysUntilDue <= reminderWindowDays;
+            boolean overdue = daysUntilDue < 0;
+
+            if (!inReminderWindow && !overdue) {
+                summary.setSkippedOutsideWindow(summary.getSkippedOutsideWindow() + 1);
+                continue;
+            }
+
+            Student student = students.get(record.getStudentId());
+            String phone = student != null ? student.getPhoneNumber() : null;
+
+            if (phone == null || phone.trim().isEmpty()) {
+                summary.setSkippedNoPhone(summary.getSkippedNoPhone() + 1);
+                summary.addDetail("Skipped " + record.getRecordId() + " (no phone number for " + record.getStudentId() + ")");
+                continue;
+            }
+
+            summary.setAttempted(summary.getAttempted() + 1);
+
+            String bookTitle = getBookTitle(record.getBookId());
+            String message;
+            if (overdue) {
+                long overdueDays = Math.abs(daysUntilDue);
+                message = String.format(
+                        "Library alert: '%s' is overdue by %d day(s). Please return immediately.",
+                        bookTitle, overdueDays);
+            } else if (daysUntilDue == 0) {
+                message = String.format(
+                        "Library reminder: '%s' is due today. Please return on time.",
+                        bookTitle);
+            } else {
+                message = String.format(
+                        "Library reminder: '%s' is due in %d day(s) on %s.",
+                        bookTitle, daysUntilDue, DateUtils.formatDate(record.getDueDate()));
+            }
+
+            boolean sent = smsService.sendSms(phone.trim(), message);
+            if (sent) {
+                summary.setSent(summary.getSent() + 1);
+                summary.addDetail("Sent to " + record.getStudentId() + " (" + phone.trim() + ") for record " + record.getRecordId());
+            } else {
+                summary.setFailed(summary.getFailed() + 1);
+                summary.addDetail("Failed for " + record.getStudentId() + " (" + phone.trim() + ") record " + record.getRecordId());
+            }
+        }
+
+        LOGGER.info(String.format(
+                "SMS reminder run complete. attempted=%d sent=%d failed=%d skippedNoPhone=%d skippedOutsideWindow=%d",
+                summary.getAttempted(), summary.getSent(), summary.getFailed(),
+                summary.getSkippedNoPhone(), summary.getSkippedOutsideWindow()));
+
+        return summary;
     }
 
     /**
@@ -663,5 +774,26 @@ public class LibraryService {
      */
     public String getBookTitle(String bookId) {
         return findBookById(bookId).map(Book::getTitle).orElse("Unknown");
+    }
+
+    /**
+     * Reloads SMS provider after settings are updated.
+     */
+    public synchronized void refreshSmsService() {
+        this.smsService = createSmsService();
+    }
+
+    /**
+     * Chooses SMS provider implementation based on environment config.
+     */
+    private SmsService createSmsService() {
+        String provider = smsSettingsService.resolveSetting(Constants.SMS_PROVIDER_ENV);
+        if (provider != null && provider.equalsIgnoreCase(Constants.SMS_PROVIDER_TWILIO)) {
+            LOGGER.info("SMS provider selected: TWILIO");
+            return new TwilioSmsService();
+        }
+
+        LOGGER.info("SMS provider selected: GENERIC HTTP gateway");
+        return new ConfigurableSmsService();
     }
 }

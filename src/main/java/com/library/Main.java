@@ -4,9 +4,9 @@ import com.library.exception.*;
 import com.library.model.Book;
 import com.library.model.BorrowRecord;
 import com.library.model.LibraryReport;
+import com.library.model.SmsReminderSummary;
 import com.library.service.LibraryService;
 import com.library.ui.MainFrame;
-import com.library.util.Constants;
 import com.library.util.DateUtils;
 
 import javax.swing.*;
@@ -93,14 +93,14 @@ public class Main {
         boolean running = true;
         while (running) {
             printMenu();
-            System.out.print("Enter your choice (1-8): ");
+            System.out.print("Enter your choice (1-9): ");
 
             String input = scanner.nextLine().trim();
             int choice;
             try {
                 choice = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println("\n[!] Invalid input. Please enter a number between 1 and 8.\n");
+                System.out.println("\n[!] Invalid input. Please enter a number between 1 and 9.\n");
                 continue;
             }
 
@@ -114,12 +114,13 @@ public class Main {
                 case 5 -> searchBookConsole();
                 case 6 -> viewOverdueConsole();
                 case 7 -> generateReportConsole();
-                case 8 -> {
+                case 8 -> sendSmsRemindersConsole();
+                case 9 -> {
                     System.out.println("Thank you for using the Library Management System!");
                     System.out.println("Goodbye!");
                     running = false;
                 }
-                default -> System.out.println("[!] Invalid choice. Please enter a number between 1 and 8.\n");
+                default -> System.out.println("[!] Invalid choice. Please enter a number between 1 and 9.\n");
             }
         }
         scanner.close();
@@ -159,7 +160,8 @@ public class Main {
         System.out.println("│  5. Search Book (by ID or Title)     │");
         System.out.println("│  6. View Overdue Books               │");
         System.out.println("│  7. Generate Report                  │");
-        System.out.println("│  8. Exit                             │");
+        System.out.println("│  8. Send Due-Date SMS Reminders      │");
+        System.out.println("│  9. Exit                             │");
         System.out.println("└──────────────────────────────────────┘");
     }
 
@@ -257,12 +259,18 @@ public class Main {
             return;
         }
 
+        System.out.print("Enter Student Phone (optional, for SMS reminders): ");
+        String phoneNumber = scanner.nextLine().trim();
+
         try {
-            BorrowRecord record = libraryService.issueBook(bookId, studentId);
+            BorrowRecord record = libraryService.issueBook(bookId, studentId, phoneNumber);
             System.out.println("[✓] Book issued successfully!");
             System.out.printf("    Record ID  : %s%n", record.getRecordId());
             System.out.printf("    Book       : %s%n", libraryService.getBookTitle(bookId));
             System.out.printf("    Student    : %s%n", studentId);
+            if (!phoneNumber.isEmpty()) {
+                System.out.printf("    SMS Phone  : %s%n", phoneNumber);
+            }
             System.out.printf("    Issue Date : %s%n", DateUtils.formatDate(record.getIssueDate()));
             System.out.printf("    Due Date   : %s%n%n", DateUtils.formatDate(record.getDueDate()));
         } catch (BookNotFoundException e) {
@@ -384,6 +392,42 @@ public class Main {
     private static void generateReportConsole() {
         LibraryReport report = libraryService.generateReport();
         System.out.println(report.toString());
+    }
+
+    /**
+     * Console handler: Send due-date SMS reminders.
+     */
+    private static void sendSmsRemindersConsole() {
+        System.out.println("═══ SEND DUE-DATE SMS REMINDERS ═══");
+        System.out.print("Send reminders for books due in how many days? (e.g., 2): ");
+
+        int reminderWindowDays;
+        try {
+            reminderWindowDays = Integer.parseInt(scanner.nextLine().trim());
+            if (reminderWindowDays < 0) {
+                System.out.println("[!] Number must be zero or positive.\n");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("[!] Invalid number.\n");
+            return;
+        }
+
+        SmsReminderSummary summary = libraryService.sendDueDateSmsReminders(reminderWindowDays);
+        System.out.println("SMS reminder run complete:");
+        System.out.printf("    Attempted: %d%n", summary.getAttempted());
+        System.out.printf("    Sent     : %d%n", summary.getSent());
+        System.out.printf("    Failed   : %d%n", summary.getFailed());
+        System.out.printf("    No Phone : %d%n", summary.getSkippedNoPhone());
+        System.out.printf("    Outside  : %d%n", summary.getSkippedOutsideWindow());
+
+        if (!summary.getDetails().isEmpty()) {
+            System.out.println("Details:");
+            for (String detail : summary.getDetails()) {
+                System.out.println("  - " + detail);
+            }
+        }
+        System.out.println();
     }
 
     // ==================== TABLE FORMATTING HELPERS ====================

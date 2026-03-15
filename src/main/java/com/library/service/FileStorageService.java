@@ -82,7 +82,6 @@ public class FileStorageService {
      * The caller simply says saveBooks(list) — all file handling, backup creation,
      * and error recovery is hidden inside this method.
      */
-    @SuppressWarnings("unchecked")
     public void saveBooks(List<Book> books) {
         createBackup(Constants.BOOKS_FILE);
         saveObject(books, Constants.BOOKS_FILE);
@@ -92,7 +91,6 @@ public class FileStorageService {
     /**
      * Saves the list of borrow records to a .dat file.
      */
-    @SuppressWarnings("unchecked")
     public void saveBorrowRecords(List<BorrowRecord> records) {
         createBackup(Constants.RECORDS_FILE);
         saveObject(records, Constants.RECORDS_FILE);
@@ -102,7 +100,6 @@ public class FileStorageService {
     /**
      * Saves the map of students to a .dat file.
      */
-    @SuppressWarnings("unchecked")
     public void saveStudents(Map<String, Student> students) {
         createBackup(Constants.STUDENTS_FILE);
         saveObject(students, Constants.STUDENTS_FILE);

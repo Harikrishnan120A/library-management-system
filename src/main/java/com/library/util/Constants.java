@@ -36,6 +36,7 @@ public final class Constants {
     public static final String BOOKS_FILE = DATA_DIR + "/books.dat";
     public static final String RECORDS_FILE = DATA_DIR + "/records.dat";
     public static final String STUDENTS_FILE = DATA_DIR + "/students.dat";
+    public static final String SMS_SETTINGS_FILE = DATA_DIR + "/sms.properties";
     public static final String LOG_FILE = "library_log.txt";
 
     // --- Backup File Suffix ---
@@ -62,4 +63,15 @@ public final class Constants {
     public static final String[] SEARCH_RESULT_COLUMNS = {
             "Book ID", "Title", "Author", "Genre", "Available Copies"
     };
+
+    // --- SMS Reminder Configuration ---
+    public static final String SMS_PROVIDER_ENV = "SMS_PROVIDER";
+    public static final String SMS_PROVIDER_GENERIC = "GENERIC";
+    public static final String SMS_PROVIDER_TWILIO = "TWILIO";
+    public static final String SMS_API_URL_ENV = "SMS_API_URL";
+    public static final String SMS_API_TOKEN_ENV = "SMS_API_TOKEN";
+    public static final String SMS_SENDER_ID_ENV = "SMS_SENDER_ID";
+    public static final String TWILIO_ACCOUNT_SID_ENV = "TWILIO_ACCOUNT_SID";
+    public static final String TWILIO_AUTH_TOKEN_ENV = "TWILIO_AUTH_TOKEN";
+    public static final String TWILIO_FROM_NUMBER_ENV = "TWILIO_FROM_NUMBER";
 }
