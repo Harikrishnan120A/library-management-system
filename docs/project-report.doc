@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <meta name="ProgId" content="Word.Document">
+  <meta name="Generator" content="Microsoft Word 15">
+  <meta name="Originator" content="Microsoft Word 15">
+  <title>Project Report - Library Management System</title>
+  <style>
+    body {
+      font-family: Calibri, Arial, sans-serif;
+      font-size: 12pt;
+      line-height: 1.5;
+      margin: 24px;
+      color: #1f2937;
+    }
+
+    h1 {
+      font-size: 20pt;
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+
+    h2 {
+      font-size: 14pt;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      color: #0b3d2e;
+      border-bottom: 1px solid #d1d5db;
+      padding-bottom: 3px;
+    }
+
+    p {
+      margin: 6px 0;
+    }
+
+    ul {
+      margin: 6px 0 8px 24px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 6px;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background: #e8f4ef;
+    }
+
+    .meta {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+
+    .image {
+      margin-top: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #e5e7eb;
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+    }
+
+    .link {
+      color: #0a58ca;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <h1>PROJECT REPORT - LIBRARY MANAGEMENT SYSTEM</h1>
+
+  <div class="meta">
+    <p><strong>Name:</strong> HARIKRISHNAN A</p>
+    <p><strong>Roll No:</strong> 24EC029</p>
+    <p><strong>Project:</strong> Library Management System</p>
+  </div>
+
+  <h2>Repository and Deployment Links</h2>
+  <p><strong>Repository:</strong> <a class="link" href="https://github.com/Harikrishnan120A/library-management-system">https://github.com/Harikrishnan120A/library-management-system</a></p>
+  <p><strong>Deployed Link:</strong> <a class="link" href="https://harikrishnan120a.github.io/library-management-system/">https://harikrishnan120a.github.io/library-management-system/</a></p>
+
+  <h2>Abstract</h2>
+  <p>
+    The Library Management System is a Java desktop application developed with Swing GUI and a console fallback mode.
+    It automates core library operations such as maintaining book records, issuing and returning books, overdue tracking,
+    fine calculation, report generation, and SMS reminders.
+  </p>
+
+  <h2>Problem Statement</h2>
+  <p>
+    Manual library handling is time consuming and error prone. This project addresses that problem by introducing a
+    structured software system for reliable data management, validation, and reporting.
+  </p>
+
+  <h2>Objectives</h2>
+  <ul>
+    <li>Build a modular object oriented Java application for library operations.</li>
+    <li>Provide both graphical and console interfaces.</li>
+    <li>Implement business logic with clear separation of concerns.</li>
+    <li>Support persistent storage and detailed reporting.</li>
+  </ul>
+
+  <h2>Technology Stack</h2>
+  <table>
+    <tr><th>Component</th><th>Technology</th></tr>
+    <tr><td>Language</td><td>Java 17</td></tr>
+    <tr><td>Build Tool</td><td>Maven</td></tr>
+    <tr><td>UI</td><td>Java Swing</td></tr>
+    <tr><td>Persistence</td><td>Object Serialization (.dat)</td></tr>
+    <tr><td>Logging</td><td>java.util.logging</td></tr>
+  </table>
+
+  <h2>Project Images</h2>
+  <p><strong>1. High Level Architecture</strong></p>
+  <img class="image" src="images/project-architecture.png" alt="Project architecture image">
+
+  <p><strong>2. Core Feature Workflow</strong></p>
+  <img class="image" src="images/feature-workflow.png" alt="Feature workflow image">
+
+  <p><strong>3. Console Mode Snapshot</strong></p>
+  <img class="image" src="images/console-output.png" alt="Console output image">
+
+  <h2>Key Features</h2>
+  <ul>
+    <li>Add, edit, delete, and search books.</li>
+    <li>Issue and return operations with validation and availability management.</li>
+    <li>Overdue detection with automatic fine calculation.</li>
+    <li>Dashboard statistics and report generation.</li>
+    <li>CSV import/export and local data persistence.</li>
+    <li>SMS reminders for due and overdue books.</li>
+  </ul>
+
+  <h2>Conclusion</h2>
+  <p>
+    The project demonstrates practical software engineering with object oriented principles and layered design.
+    It is suitable for academic submission and can be extended with database integration and web-based modules.
+  </p>
+</body>
+</html>
