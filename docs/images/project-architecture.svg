@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Library Management System Architecture</title>
+  <desc id="desc">High level architecture showing UI, service, model, and storage layers.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff" />
+      <stop offset="100%" stop-color="#eef7f3" />
+    </linearGradient>
+    <style>
+      .title { font: 700 34px Segoe UI, Arial, sans-serif; fill: #143b2f; }
+      .subtitle { font: 500 18px Segoe UI, Arial, sans-serif; fill: #355f52; }
+      .box-title { font: 700 20px Segoe UI, Arial, sans-serif; fill: #123126; }
+      .box-text { font: 500 15px Segoe UI, Arial, sans-serif; fill: #1f4c3c; }
+      .arrow { stroke: #1f6b53; stroke-width: 3; fill: none; marker-end: url(#arrowHead); }
+    </style>
+    <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1f6b53" />
+    </marker>
+  </defs>
+
+  <rect width="1200" height="700" rx="24" fill="url(#bg)" />
+  <text x="60" y="70" class="title">Library Management System - Project Architecture</text>
+  <text x="60" y="105" class="subtitle">Java 17 | Maven | Swing GUI + Console Mode | Serialization Storage</text>
+
+  <rect x="60" y="160" width="500" height="170" rx="16" fill="#dff1ff" stroke="#80b8de" stroke-width="2" />
+  <text x="85" y="200" class="box-title">Presentation Layer</text>
+  <text x="85" y="235" class="box-text">- MainFrame and tab panels (Dashboard, Books, Issue, Search, Reports)</text>
+  <text x="85" y="263" class="box-text">- Console menu fallback for headless mode</text>
+  <text x="85" y="291" class="box-text">- Main class decides GUI vs console launch</text>
+
+  <rect x="640" y="160" width="500" height="170" rx="16" fill="#e9fbe8" stroke="#98d09a" stroke-width="2" />
+  <text x="665" y="200" class="box-title">Service Layer</text>
+  <text x="665" y="235" class="box-text">- LibraryService singleton handles all business rules</text>
+  <text x="665" y="263" class="box-text">- Issue / return, fine, overdue, reminders, reports</text>
+  <text x="665" y="291" class="box-text">- Validation and exception handling</text>
+
+  <rect x="60" y="390" width="500" height="210" rx="16" fill="#fff6de" stroke="#e2c67f" stroke-width="2" />
+  <text x="85" y="430" class="box-title">Domain Model</text>
+  <text x="85" y="465" class="box-text">- Book</text>
+  <text x="85" y="493" class="box-text">- Student</text>
+  <text x="85" y="521" class="box-text">- BorrowRecord (ACTIVE, RETURNED, OVERDUE)</text>
+  <text x="85" y="549" class="box-text">- LibraryReport and SMS reminder summary</text>
+
+  <rect x="640" y="390" width="500" height="210" rx="16" fill="#f2ebff" stroke="#b9a4dd" stroke-width="2" />
+  <text x="665" y="430" class="box-title">Persistence and Logging</text>
+  <text x="665" y="465" class="box-text">- FileStorageService singleton</text>
+  <text x="665" y="493" class="box-text">- books.dat, records.dat, students.dat (+ backups)</text>
+  <text x="665" y="521" class="box-text">- CSV import/export support</text>
+  <text x="665" y="549" class="box-text">- library_log.txt for operation logs</text>
+
+  <path class="arrow" d="M560 245 L640 245" />
+  <path class="arrow" d="M890 330 L890 390" />
+  <path class="arrow" d="M640 495 L560 495" />
+  <path class="arrow" d="M310 330 L310 390" />
+</svg>

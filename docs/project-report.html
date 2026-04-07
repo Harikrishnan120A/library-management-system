@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Report - Library Management System</title>
+  <meta name="description" content="Project report for Library Management System by Harikrishnan A.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Sora:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .report-page {
+      width: min(980px, 92vw);
+      margin: 0 auto;
+      padding: 3.5rem 0 2.5rem;
+    }
+
+    .report-page h1,
+    .report-page h2,
+    .report-page h3 {
+      font-family: "Sora", "Trebuchet MS", sans-serif;
+      margin: 0 0 0.8rem;
+    }
+
+    .report-page h1 {
+      font-size: clamp(2rem, 4.8vw, 3rem);
+    }
+
+    .report-page h2 {
+      font-size: clamp(1.25rem, 2.8vw, 1.7rem);
+      margin-top: 1.2rem;
+    }
+
+    .report-card {
+      background: rgba(255, 253, 247, 0.84);
+      border: 1px solid rgba(19, 34, 29, 0.15);
+      border-radius: 16px;
+      box-shadow: 0 14px 28px rgba(19, 34, 29, 0.12);
+      padding: 1.2rem;
+      margin: 1rem 0;
+    }
+
+    .report-page table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6rem;
+    }
+
+    .report-page th,
+    .report-page td {
+      border: 1px solid rgba(19, 34, 29, 0.2);
+      padding: 0.62rem;
+      text-align: left;
+    }
+
+    .report-page th {
+      background: rgba(45, 111, 86, 0.12);
+    }
+
+    .report-page ul {
+      padding-left: 1.1rem;
+      margin: 0.4rem 0 0.3rem;
+    }
+
+    .report-page img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(19, 34, 29, 0.16);
+      background: #fff;
+      margin-top: 0.7rem;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <main class="report-page">
+    <section class="report-card reveal visible">
+      <h1>Library Management System - Project Report</h1>
+      <p><strong>Name:</strong> HARIKRISHNAN A</p>
+      <p><strong>Roll Number:</strong> 24EC029</p>
+      <p><strong>Project Type:</strong> Java Course Project</p>
+      <div class="top-actions">
+        <a class="btn primary" href="https://github.com/Harikrishnan120A/library-management-system" target="_blank" rel="noreferrer">Repository</a>
+        <a class="btn ghost" href="https://harikrishnan120a.github.io/library-management-system/" target="_blank" rel="noreferrer">Deployed Link</a>
+        <a class="btn ghost" href="index.html">Back to Home</a>
+      </div>
+    </section>
+
+    <section class="report-card reveal visible">
+      <h2>Abstract</h2>
+      <p>The Library Management System is a Java desktop application that automates day to day library tasks through a Swing GUI and a console fallback mode. It handles book lifecycle, issue and return operations, overdue tracking, fine calculation, reporting, and data persistence.</p>
+    </section>
+
+    <section class="report-card reveal visible">
+      <h2>Problem Statement</h2>
+      <p>Manual tracking of books and borrow records can cause errors, delays, and reporting gaps. The project solves this by introducing a structured software system with validation, searchable records, and automated alerts.</p>
+    </section>
+
+    <section class="report-card reveal visible">
+      <h2>Objectives</h2>
+      <ul>
+        <li>Build a complete object oriented Java application for library workflows.</li>
+        <li>Provide both graphical and console based interfaces.</li>
+        <li>Maintain clean separation between UI, business logic, and storage.</li>
+        <li>Persist records and support report exports.</li>
+      </ul>
+    </section>
+
+    <section class="report-card reveal visible">
+      <h2>Technology Stack</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Technology</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Language</td>
+            <td>Java 17</td>
+          </tr>
+          <tr>
+            <td>Build Tool</td>
+            <td>Maven</td>
+          </tr>
+          <tr>
+            <td>UI</td>
+            <td>Java Swing</td>
+          </tr>
+          <tr>
+            <td>Persistence</td>
+            <td>Object Serialization (.dat)</td>
+          </tr>
+          <tr>
+            <td>Logging</td>
+            <td>java.util.logging</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="report-card reveal visible">
+      <h2>Project Images</h2>
+      <h3>High Level Architecture</h3>
+      <img src="images/project-architecture.svg" alt="Library Management System architecture diagram">
+      <h3>Feature Workflow</h3>
+      <img src="images/feature-workflow.svg" alt="Feature workflow diagram showing issue return report flow">
+      <h3>Console Mode Snapshot</h3>
+      <img src="images/console-output.svg" alt="Console mode sample output">
+    </section>
+
+    <section class="report-card reveal visible">
+      <h2>Implemented Features</h2>
+      <ul>
+        <li>Add, edit, delete, and search books</li>
+        <li>Issue and return with availability checks</li>
+        <li>Overdue tracking and fine calculation</li>
+        <li>Dashboard and report generation</li>
+        <li>CSV import and export</li>
+        <li>SMS reminder integration</li>
+      </ul>
+    </section>
+
+    <section class="report-card reveal visible">
+      <h2>Conclusion</h2>
+      <p>The project demonstrates practical software engineering using object oriented design and a modular architecture. It is suitable for academic presentation and can be extended to database backed and web based versions in future.</p>
+    </section>
+  </main>
+</body>
+</html>

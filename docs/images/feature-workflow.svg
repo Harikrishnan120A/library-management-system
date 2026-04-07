@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+  <title id="title">Feature Workflow Diagram</title>
+  <desc id="desc">Workflow from book management to issue, return, fine, reporting, and reminders.</desc>
+  <defs>
+    <style>
+      .title { font: 700 32px Segoe UI, Arial, sans-serif; fill: #162f47; }
+      .stepTitle { font: 700 20px Segoe UI, Arial, sans-serif; fill: #0f2f4d; }
+      .stepText { font: 500 15px Segoe UI, Arial, sans-serif; fill: #23496d; }
+      .edge { stroke: #1e6ba7; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto">
+      <path d="M0,0 L0,8 L11,4 z" fill="#1e6ba7" />
+    </marker>
+  </defs>
+
+  <rect width="1200" height="820" fill="#f6fbff" rx="20" />
+  <text x="60" y="70" class="title">Core Feature Workflow</text>
+
+  <rect x="70" y="130" width="480" height="120" rx="14" fill="#dff1ff" stroke="#8abce8" stroke-width="2" />
+  <text x="95" y="170" class="stepTitle">1. Add and Maintain Books</text>
+  <text x="95" y="200" class="stepText">Create, update, delete, and validate book records with availability tracking.</text>
+
+  <rect x="650" y="130" width="480" height="120" rx="14" fill="#e8f9ed" stroke="#9dd7ac" stroke-width="2" />
+  <text x="675" y="170" class="stepTitle">2. Issue Book to Student</text>
+  <text x="675" y="200" class="stepText">Check stock and student limits, then create active borrow record.</text>
+
+  <rect x="70" y="320" width="480" height="120" rx="14" fill="#fff8de" stroke="#e9d18b" stroke-width="2" />
+  <text x="95" y="360" class="stepTitle">3. Return and Fine Calculation</text>
+  <text x="95" y="390" class="stepText">Calculate overdue fine after 14 days at Rs 5 per day and update status.</text>
+
+  <rect x="650" y="320" width="480" height="120" rx="14" fill="#f0ecff" stroke="#c2b1ea" stroke-width="2" />
+  <text x="675" y="360" class="stepTitle">4. Search and Reports</text>
+  <text x="675" y="390" class="stepText">Filter by ID, title, author and generate summary reports or CSV export.</text>
+
+  <rect x="360" y="520" width="480" height="150" rx="14" fill="#ffe9ef" stroke="#e8a7bb" stroke-width="2" />
+  <text x="385" y="565" class="stepTitle">5. Alerts and Monitoring</text>
+  <text x="385" y="598" class="stepText">Detect due and overdue books, send SMS reminders, and log all operations.</text>
+  <text x="385" y="625" class="stepText">Dashboard shows total books, available count, active borrows, and overdue items.</text>
+
+  <path class="edge" d="M550 190 L650 190" />
+  <path class="edge" d="M890 250 L890 320" />
+  <path class="edge" d="M650 380 L550 380" />
+  <path class="edge" d="M310 250 L310 320" />
+  <path class="edge" d="M310 440 L470 520" />
+  <path class="edge" d="M890 440 L730 520" />
+</svg>

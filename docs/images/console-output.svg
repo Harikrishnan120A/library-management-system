@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Console Mode Snapshot</title>
+  <desc id="desc">Styled snapshot of application console menu output.</desc>
+  <rect width="1200" height="760" rx="18" fill="#0f1720" />
+  <rect x="0" y="0" width="1200" height="52" rx="18" fill="#1e2937" />
+  <circle cx="28" cy="26" r="8" fill="#ef4444" />
+  <circle cx="52" cy="26" r="8" fill="#f59e0b" />
+  <circle cx="76" cy="26" r="8" fill="#22c55e" />
+  <text x="100" y="32" fill="#d6e2ef" font-family="Consolas, Courier New, monospace" font-size="18">Library Management System - Console Run</text>
+
+  <g fill="#dbeafe" font-family="Consolas, Courier New, monospace" font-size="20">
+    <text x="40" y="95">Starting Library Management System in Console Mode...</text>
+    <text x="40" y="145">+-----------------------------------------------+</text>
+    <text x="40" y="175">|        LIBRARY MANAGEMENT SYSTEM v1.0         |</text>
+    <text x="40" y="205">+-----------------------------------------------+</text>
+    <text x="40" y="250">Total Books: 10 | Available: 10 | Active Borrows: 0</text>
+    <text x="40" y="300">1. Add Book</text>
+    <text x="40" y="332">2. View All Books</text>
+    <text x="40" y="364">3. Issue Book</text>
+    <text x="40" y="396">4. Return Book</text>
+    <text x="40" y="428">5. Search Book (by ID or Title)</text>
+    <text x="40" y="460">6. View Overdue Books</text>
+    <text x="40" y="492">7. Generate Report</text>
+    <text x="40" y="524">8. Send Due-Date SMS Reminders</text>
+    <text x="40" y="556">9. Exit</text>
+    <text x="40" y="612">Enter your choice (1-9): 9</text>
+    <text x="40" y="654">Thank you for using the Library Management System!</text>
+    <text x="40" y="686">Goodbye!</text>
+  </g>
+</svg>
