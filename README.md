@@ -99,6 +99,17 @@ mvn package
 java -jar target/library-management-system-1.0-SNAPSHOT.jar
 ```
 
+### GitHub Pages
+
+Project site URL:
+
+```text
+https://harikrishnan120a.github.io/library-management-system/
+```
+
+The GitHub Pages site hosts project documentation and run instructions.
+Because this is a Java Swing desktop application, the app itself runs locally (not inside the browser).
+
 ---
 
 ## 🖥️ GUI Overview

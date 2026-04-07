@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Management System</title>
+  <meta name="description" content="Java Swing Library Management System: features, setup steps, and run commands.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Sora:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <header class="hero reveal">
+    <p class="eyebrow">Java 17 + Maven + Swing</p>
+    <h1>Library Management System</h1>
+    <p class="subtitle">
+      A desktop-first library app with a Swing GUI, console fallback, overdue tracking, reports, and CSV tools.
+    </p>
+    <div class="hero-actions">
+      <a class="btn primary" href="https://github.com/Harikrishnan120A/library-management-system" target="_blank" rel="noreferrer">View Source</a>
+      <a class="btn ghost" href="#run">Run Locally</a>
+    </div>
+    <p class="note">GitHub Pages hosts project documentation only. The Swing app runs on your machine, not in the browser.</p>
+  </header>
+
+  <main>
+    <section class="panel reveal" id="features">
+      <h2>What It Does</h2>
+      <div class="chips" role="list" aria-label="Feature list">
+        <span role="listitem">Book CRUD</span>
+        <span role="listitem">Issue / Return</span>
+        <span role="listitem">Overdue Detection</span>
+        <span role="listitem">Fine Calculation</span>
+        <span role="listitem">CSV Import / Export</span>
+        <span role="listitem">Dashboard + Reports</span>
+        <span role="listitem">SMS Reminders</span>
+        <span role="listitem">Serialization Persistence</span>
+      </div>
+    </section>
+
+    <section class="panel reveal" id="run">
+      <h2>Run It</h2>
+      <div class="grid">
+        <article>
+          <h3>GUI Mode</h3>
+          <pre><code>mvn compile
+mvn exec:java -Dexec.mainClass="com.library.Main"</code></pre>
+        </article>
+        <article>
+          <h3>Console Mode</h3>
+          <pre><code>mvn compile
+mvn exec:java -Dexec.mainClass="com.library.Main" -Dexec.args="--console"</code></pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel reveal" id="stack">
+      <h2>Stack</h2>
+      <p>Java 17, Maven, Java Swing, java.util.logging, and object serialization for data storage.</p>
+    </section>
+  </main>
+
+  <footer class="reveal">
+    <p>Built by Harikrishnan</p>
+  </footer>
+
+  <script>
+    const nodes = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    nodes.forEach((node, index) => {
+      node.style.transitionDelay = `${index * 60}ms`;
+      io.observe(node);
+    });
+  </script>
+</body>
+</html>
